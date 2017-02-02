@@ -1,0 +1,41 @@
+{
+  "name": "chunk-store-read-stream",
+  "version": "0.0.0",
+  "description": "Read an abstract-chunk-store as a stream",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xuset/chunk-store-read-stream.git"
+  },
+  "keywords": [
+    "abstract-chunk-store",
+    "chunk-store",
+    "chunk",
+    "store",
+    "read",
+    "stream",
+    "readable",
+    "readablestream"
+  ],
+  "author": "xuset",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuset/chunk-store-read-stream/issues"
+  },
+  "homepage": "https://github.com/xuset/chunk-store-read-stream#readme",
+  "devDependencies": {
+    "browserify": "^13.3.0",
+    "concat-stream": "^1.6.0",
+    "memory-chunk-store": "^1.2.0",
+    "run-parallel": "^1.1.6",
+    "standard": "^8.6.0",
+    "tape": "^4.6.3"
+  },
+  "dependencies": {
+    "inherits": "^2.0.3",
+    "readable-stream": "^2.2.2"
+  }
+}
