@@ -15,12 +15,13 @@ function Stream (chunkstore, opts) {
   this.onmiss = opts.onmiss
   this.destroyed = false
 
-  this._chunkLength = opts.chunkLength || chunkstore.chunkLength
-  this._bytesOffset = 'start' in opts ? opts.start : 0
-  this._bytesLeft = 'end' in opts ? opts.end : chunkstore.length
-  this._startIndex = Math.floor(this._bytesOffset / this._chunkLength)
-  this._endIndex = Math.floor(this._bytesLeft / this._chunkLength)
-  this._currentIndex = this._startIndex
+  var start = 'start' in opts ? opts.start : 0
+  var end = 'end' in opts ? opts.end : chunkstore.length - 1
+  if (end < start) throw new Error('opts.start must be more than the end')
+
+  this._currentIndex = Math.floor(start / chunkstore.chunkLength)
+  this._bytesOffset = start - this._currentIndex * chunkstore.chunkLength
+  this._bytesLeft = end - start + 1
   this._reading = false
 
   if (typeof this._bytesLeft === 'undefined') {

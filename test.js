@@ -33,11 +33,11 @@ test('Uneven chunk', function (t) {
 test('start and end', function (t) {
   createStore(new Buffer('abcdef'), 3, function (err, store) {
     t.error(err)
-    var stream = Stream(store, {start: 1, end: 4})
+    var stream = Stream(store, {start: 2, end: 4})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('bcde'))
+      t.deepEqual(buf, new Buffer('cde'))
       t.end()
     }))
   })
@@ -46,11 +46,24 @@ test('start and end', function (t) {
 test('start and end single chunk', function (t) {
   createStore(new Buffer('abcdef'), 6, function (err, store) {
     t.error(err)
-    var stream = Stream(store, {start: 1, end: 4})
+    var stream = Stream(store, {start: 1, end: 3})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('bcde'))
+      t.deepEqual(buf, new Buffer('bcd'))
+      t.end()
+    }))
+  })
+})
+
+test('start and no end', function (t) {
+  createStore(new Buffer('abcdef'), 4, function (err, store) {
+    t.error(err)
+    var stream = Stream(store, {start: 4})
+    stream.on('error', function (err) { t.fail(err) })
+
+    stream.pipe(concat(function (buf) {
+      t.deepEqual(buf, new Buffer('ef'))
       t.end()
     }))
   })
@@ -163,6 +176,7 @@ test('simple errors', function (t) {
   var store = new MemoryChunkStore(1)
   t.doesNotThrow(function () { Stream(store) })
   t.throws(function () { Stream() })
+  t.throws(function () { Stream(store, {start: 1, end: 0}) })
   t.doesNotThrow(function () {
     var s = new Stream(store)
     s.destroy()
