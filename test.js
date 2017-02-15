@@ -173,6 +173,10 @@ test('destroy mid stream', function (t) {
 })
 
 test('simple errors', function (t) {
+  var noLengthStore = new MemoryChunkStore(1)
+  delete noLengthStore.length
+  t.throws(function () { Stream(noLengthStore) })
+
   var store = new MemoryChunkStore(1)
   t.doesNotThrow(function () { Stream(store) })
   t.throws(function () { Stream() })

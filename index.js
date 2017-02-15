@@ -15,18 +15,18 @@ function Stream (chunkstore, opts) {
   this.onmiss = opts.onmiss
   this.destroyed = false
 
+  if (opts.end == null && chunkstore.length == null) {
+    throw new Error('Must define opts.end or chunkstore.length')
+  }
+
   var start = 'start' in opts ? opts.start : 0
   var end = 'end' in opts ? opts.end : chunkstore.length - 1
-  if (end < start) throw new Error('opts.start must be more than the end')
+  if (end < start) throw new Error('opts.start must be less than or equal to the end')
 
   this._currentIndex = Math.floor(start / chunkstore.chunkLength)
   this._bytesOffset = start - this._currentIndex * chunkstore.chunkLength
   this._bytesLeft = end - start + 1
   this._reading = false
-
-  if (typeof this._bytesLeft === 'undefined') {
-    throw new Error('Must define opts.end or chunkstore.length')
-  }
 }
 
 Stream.prototype._read = function () {
