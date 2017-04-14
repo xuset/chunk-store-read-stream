@@ -1,5 +1,7 @@
 # chunk-store-read-stream [![Build Status][travis-image]][travis-url] [![npm][npm-image]][npm-url]
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/xuset/chunk-store-read-stream.svg)](https://greenkeeper.io/)
+
 [npm-image]: https://img.shields.io/npm/v/chunk-store-read-stream.svg?style=flat
 [npm-url]: https://npmjs.org/package/chunk-store-read-stream
 [travis-image]: https://travis-ci.org/xuset/chunk-store-read-stream.svg?branch=master
