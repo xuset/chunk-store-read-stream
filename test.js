@@ -5,98 +5,98 @@ var runParallel = require('run-parallel')
 var test = require('tape')
 
 test('sanity test', function (t) {
-  createStore(new Buffer('abcdef'), 3, function (err, store) {
+  createStore(Buffer.from('abcdef'), 3, function (err, store) {
     t.error(err)
     var stream = Stream(store)
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('abcdef'))
+      t.deepEqual(buf, Buffer.from('abcdef'))
       t.end()
     }))
   })
 })
 
 test('Uneven chunk', function (t) {
-  createStore(new Buffer('abcd'), 3, function (err, store) {
+  createStore(Buffer.from('abcd'), 3, function (err, store) {
     t.error(err)
     var stream = Stream(store)
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('abcd'))
+      t.deepEqual(buf, Buffer.from('abcd'))
       t.end()
     }))
   })
 })
 
 test('start and end', function (t) {
-  createStore(new Buffer('abcdef'), 3, function (err, store) {
+  createStore(Buffer.from('abcdef'), 3, function (err, store) {
     t.error(err)
     var stream = Stream(store, {start: 2, end: 4})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('cde'))
+      t.deepEqual(buf, Buffer.from('cde'))
       t.end()
     }))
   })
 })
 
 test('start and end single chunk', function (t) {
-  createStore(new Buffer('abcdef'), 6, function (err, store) {
+  createStore(Buffer.from('abcdef'), 6, function (err, store) {
     t.error(err)
     var stream = Stream(store, {start: 1, end: 3})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('bcd'))
+      t.deepEqual(buf, Buffer.from('bcd'))
       t.end()
     }))
   })
 })
 
 test('start and no end', function (t) {
-  createStore(new Buffer('abcdef'), 4, function (err, store) {
+  createStore(Buffer.from('abcdef'), 4, function (err, store) {
     t.error(err)
     var stream = Stream(store, {start: 4})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('ef'))
+      t.deepEqual(buf, Buffer.from('ef'))
       t.end()
     }))
   })
 })
 
 test('equal start and end', function (t) {
-  createStore(new Buffer('abc'), 3, function (err, store) {
+  createStore(Buffer.from('abc'), 3, function (err, store) {
     t.error(err)
     var stream = Stream(store, {start: 1, end: 1})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('b'))
+      t.deepEqual(buf, Buffer.from('b'))
       t.end()
     }))
   })
 })
 
 test('onmiss', function (t) {
-  createStore(new Buffer('abc'), 3, 6, function (err, store) {
+  createStore(Buffer.from('abc'), 3, 6, function (err, store) {
     t.error(err)
     var stream = Stream(store, {onmiss: onmiss})
     stream.on('error', function (err) { t.fail(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('abcdef'))
+      t.deepEqual(buf, Buffer.from('abcdef'))
       t.end()
     }))
 
     function onmiss (err, index, retry) {
       t.ok(err instanceof Error)
       t.equal(index, 1)
-      store.put(1, new Buffer('def'), function (err) {
+      store.put(1, Buffer.from('def'), function (err) {
         t.error(err)
         retry()
       })
@@ -105,7 +105,7 @@ test('onmiss', function (t) {
 })
 
 test('onmiss error', function (t) {
-  createStore(new Buffer('abc'), 3, 6, function (err, store) {
+  createStore(Buffer.from('abc'), 3, 6, function (err, store) {
     t.error(err)
     var stream = Stream(store, {onmiss: onmiss})
 
@@ -125,14 +125,14 @@ test('onmiss error', function (t) {
 })
 
 test('onmiss retry double called is ignored', function (t) {
-  createStore(new Buffer('abc'), 3, 6, function (err, store) {
+  createStore(Buffer.from('abc'), 3, 6, function (err, store) {
     t.error(err)
     var stream = Stream(store, {onmiss: onmiss})
 
     stream.on('error', function (err) { t.error(err) })
 
     stream.pipe(concat(function (buf) {
-      t.deepEqual(buf, new Buffer('abcdef'))
+      t.deepEqual(buf, Buffer.from('abcdef'))
       t.end()
     }))
 
@@ -141,7 +141,7 @@ test('onmiss retry double called is ignored', function (t) {
       if (index === 2) return
       t.equal(index, 1)
 
-      store.put(1, new Buffer('def'), function (err) {
+      store.put(1, Buffer.from('def'), function (err) {
         t.error(err)
         retry()
         t.throws(retry)
@@ -151,13 +151,13 @@ test('onmiss retry double called is ignored', function (t) {
 })
 
 test('destroy mid stream', function (t) {
-  createStore(new Buffer('abc'), 3, 6, function (err, store) {
+  createStore(Buffer.from('abc'), 3, 6, function (err, store) {
     t.error(err)
     var stream = Stream(store, {onmiss: onmiss})
 
     stream.on('error', function (err) { t.error(err) })
     stream.on('data', function (chunk) {
-      t.deepEqual(chunk, new Buffer('abc'))
+      t.deepEqual(chunk, Buffer.from('abc'))
     })
     stream.on('close', function () {
       t.equal(stream.destroyed, true)
