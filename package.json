@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/xuset/chunk-store-read-stream#readme",
   "devDependencies": {
-    "browserify": "^14.3.0",
+    "browserify": "^16.0.0",
     "concat-stream": "^1.6.0",
     "memory-chunk-store": "^1.2.0",
     "run-parallel": "^1.1.6",
