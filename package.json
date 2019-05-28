@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "inherits": "^2.0.3",
-    "readable-stream": "^2.2.9"
+    "readable-stream": "^3.4.0"
   }
 }
